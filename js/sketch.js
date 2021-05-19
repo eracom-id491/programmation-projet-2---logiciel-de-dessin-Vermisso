@@ -3,7 +3,14 @@ let timer = 40;
 let TimeAmount = 40;
 let gommes = [];
 let posY = 0;
+let strokeSize = 5;
+let imgGomme;
+let isDecreasing = false;
 
+
+function preload(){
+  imgGomme = loadImage("img/Gomme.png");
+}
 function setup() {
   createCanvas(windowWidth, windowHeight);
   saveButton = createButton("save");
@@ -15,28 +22,9 @@ function setup() {
   fill(0);
 
   setInterval(addSecondToTimer, 1000);
-
-
-  for (let i = 0; i < 1; i ++){
-
-    gommes[i] = {
-      x: random(0, width),
-      y: 0,
-   
-      display: function(){
-        fill(0);
-        rectMode(CENTER);
-        noStroke();
-        rect(this.x,this.y,100,100);
-      },
- 
-      move: function(){
-       
-       this.y = this.y + 1;
-     }
-   }
- }
-  
+  setInterval(SpawnGomme, 3500);
+  setInterval(growStroke, 10);
+  SpawnGomme();
 }
 
 function draw() {
@@ -47,7 +35,8 @@ function draw() {
 
   }
 
-  stroke(255, 50,50);
+  strokeWeight(strokeSize);
+  stroke(0,0,0);
   drawing();
   AfficherTimer();
   DeathAnalyser();
@@ -115,3 +104,48 @@ function loopGommes(){
 function downloadImage() {
   save();
 }
+
+function SpawnGomme(){
+
+  for (let i = 0; i < 1; i ++){
+
+    gommes[i] = {
+      x: random(0, width),
+      y: 0,
+   
+      display: function(){
+        fill(255);
+        rectMode(CENTER);
+        imageMode(CENTER);
+        noStroke();
+        rect(this.x,this.y,220,220);
+        image(imgGomme, this.x, this.y, 290, 290);
+      },
+ 
+      move: function(){
+       
+       this.y = this.y + 5;
+     }
+   }
+ }
+}
+
+function growStroke(){
+  if(strokeSize <= 39 && isDecreasing == false){
+    strokeSize = strokeSize + 1;
+  }
+  
+  if(strokeSize >= 40)
+  {
+    isDecreasing = true;
+  }
+
+  if(isDecreasing == true){
+    strokeSize = strokeSize - 1;
+  }
+
+  if(strokeSize <= 1){
+    isDecreasing = false;
+  }
+}
+
