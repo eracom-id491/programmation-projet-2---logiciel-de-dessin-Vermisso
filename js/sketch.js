@@ -1,46 +1,81 @@
+
 let saveButton;
-let timer = 40;
-let TimeAmount = 40;
+let timer = 20;
+let TimeAmount = 20;
 let gommes = [];
 let posY = 0;
 let strokeSize = 5;
 let imgGomme;
+let imgGommeBlanche;
+let imgCrayon;
 let isDecreasing = false;
+let mots = ["un tracteur", "un jet privé", "un ordinateur portable", "Waluigi", "iron man", "Super Mario", "Daniel", "un appareil photo", "un clavier", "un chat", "un chien", "Harry Potter", "un bus", "un taxi", "un gâteau", "du chocolat", "une souris", "une lampe", "un téléphone", "totoro"];
+let motActuel;
+let gameHasStarted = false;
+let readyToDraw = false;
+let isOnTitleScreen;
+let foundButton;
+
 
 
 function preload(){
   imgGomme = loadImage("img/Gomme.png");
+  imgGommeBlanche = loadImage("img/Gomme_Blanche.png");
+  imgCrayon = loadImage("img/Crayon.png");
 }
+
+
 function setup() {
+  motActuel = random(mots);
   createCanvas(windowWidth, windowHeight);
+  isOnTitleScreen = true;
   saveButton = createButton("save");
   saveButton.position(width - 50, height - 25);
   saveButton.mousePressed(downloadImage);
   background(255);
 
-  //setInterval(spawnGomme, 2000);
-  fill(0);
-
+  
+  
   setInterval(addSecondToTimer, 1000);
   setInterval(SpawnGomme, 3500);
   setInterval(growStroke, 10);
-  SpawnGomme();
+  
+  displayText();
+  
 }
+
 
 function draw() {
 
-  fill(0);
+  
+  if(mouseIsPressed && isOnTitleScreen ==true){
+    gameHasStarted = true;
+    displayText();
+    isOnTitleScreen = false;
+  }
+
+  
+  
   if(mouseIsPressed) {
+    fill(0);
     line(mouseX, mouseY, pmouseX, pmouseY);
 
   }
 
+  if(gameHasStarted == true){
+    drawing();
+    AfficherTimer();
+    DeathAnalyser();
+    loopGommes();
+
+  }
+  
+
   strokeWeight(strokeSize);
   stroke(0,0,0);
-  drawing();
-  AfficherTimer();
-  DeathAnalyser();
-  loopGommes();
+  
+  
+  
 
   for(let i = 0; i < gommes.length; i++){
     gommes[i].move();
@@ -49,6 +84,7 @@ function draw() {
 }
 
 function drawing(){
+  stroke(0);
   if (mouseIsPressed) {
     line(mouseX, mouseY, pmouseX, pmouseY, 6);
   }
@@ -63,13 +99,17 @@ function AfficherTimer(){
   noStroke();
   rectMode(CENTER);
   fill(255,255,255);
-  rect(width/2, height/10, 120,120);
+  rect(10, 10, 120,120);
   fill(0,0,0);
-  text(timer, width/2, height/10 );
+  textSize(25);
+  text(timer, 50, 50);
 }
 
 function addSecondToTimer(){
- timer = timer-1;
+  if(gameHasStarted == true){
+    timer = timer-1;
+  }
+ 
 }
 
 function DeathAnalyser() 
@@ -80,7 +120,10 @@ function DeathAnalyser()
 }
 
 function loose(){
-  timer = TimeAmount;
+  gameHasStarted = false;
+  textSize(30);
+  text("FINI!!!! Alors ils ont trouvé ?", width/2, height - 40)
+
 }
 
 function windowResized() {
@@ -89,7 +132,7 @@ function windowResized() {
   saveButton = createButton("save");
   saveButton.position(width - 50, height - 25);
   saveButton.mousePressed(downloadImage);
-  background(0);
+  background(255);
 }
 
 function loopGommes(){
@@ -107,27 +150,31 @@ function downloadImage() {
 
 function SpawnGomme(){
 
-  for (let i = 0; i < 1; i ++){
+  if(gameHasStarted == true && timer >=2){
 
-    gommes[i] = {
-      x: random(0, width),
-      y: 0,
+    for (let i = 0; i < 1; i ++){
+
+      gommes[i] = {
+        x: random(0, width),
+        y: 0,
+     
+        display: function(){
+          fill(255);
+          rectMode(CENTER);
+          imageMode(CENTER);
+          noStroke();
+          image(imgGommeBlanche, this.x, this.y, 290, 290);
+          image(imgGomme, this.x, this.y, 290, 290);
+        },
    
-      display: function(){
-        fill(255);
-        rectMode(CENTER);
-        imageMode(CENTER);
-        noStroke();
-        rect(this.x,this.y,220,220);
-        image(imgGomme, this.x, this.y, 290, 290);
-      },
- 
-      move: function(){
-       
-       this.y = this.y + 5;
+        move: function(){
+         
+         this.y = this.y + 6;
+       }
      }
    }
- }
+  }
+  
 }
 
 function growStroke(){
@@ -148,4 +195,33 @@ function growStroke(){
     isDecreasing = false;
   }
 }
+
+function displayText(){
+  stroke(255);
+  textSize(80);
+  textAlign(CENTER);
+  text("Dessinez " + motActuel, width/2, height/4);
+  textSize(40);
+  text("Cliquez pour commencer!", width/2, height/2); 
+
+  if(gameHasStarted == true){
+  stroke(255);
+  fill(255)
+  textSize(80)
+  textAlign(CENTER);
+  text("Dessinez " + motActuel, width/2, height/4);
+  textSize(40);
+  text("Cliquez pour commencer!", width/2, height/2); 
+  }
+}
+
+
+
+
+
+
+
+
+
+
 

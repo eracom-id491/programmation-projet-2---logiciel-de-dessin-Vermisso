@@ -1,5 +1,7 @@
 body {
   font-family: sans-serif;
+  
+  cursor: url("img/Crayon.png"), auto;
 }
 
 main {
@@ -28,3 +30,6 @@ main a {
     max-width: 50vw;
   }
 }
+
+
+
