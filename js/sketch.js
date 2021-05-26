@@ -9,12 +9,14 @@ let imgGomme;
 let imgGommeBlanche;
 let imgCrayon;
 let isDecreasing = false;
-let mots = ["un tracteur", "un jet privé", "un ordinateur portable", "Waluigi", "iron man", "Super Mario", "Daniel", "un appareil photo", "un clavier", "un chat", "un chien", "Harry Potter", "un bus", "un taxi", "un gâteau", "du chocolat", "une souris", "une lampe", "un téléphone", "totoro"];
+let mots = ["un tracteur", "un jet privé", "un ordinateur portable", "Waluigi", "iron man", "Super Mario", "Daniel", "un appareil photo", "un clavier", "un chat", "un chien", "Harry Potter", "un bus", "un taxi", "un gâteau", "du chocolat", "une souris", "une lampe", "un téléphone", "totoro","une fleur", "une banane", "Théo", " un heptadécaèdre", "la capitale demographique du Pakistan", "La courbe du bitcoin de 2009 à 2020", 'un burger du BK' ];
 let motActuel;
 let gameHasStarted = false;
+let knowsTheWord = false;
+let isOnTitleScreen = true;
 let readyToDraw = false;
-let isOnTitleScreen;
-let foundButton;
+
+
 
 
 
@@ -49,11 +51,15 @@ function draw() {
 
   
   if(mouseIsPressed && isOnTitleScreen ==true){
-    gameHasStarted = true;
-    displayText();
+    knowsTheWord = true;
+    readyScreen();
     isOnTitleScreen = false;
   }
 
+
+  cursor("img/Crayon.png",50,80);
+  
+  
   
   
   if(mouseIsPressed) {
@@ -122,7 +128,7 @@ function DeathAnalyser()
 function loose(){
   gameHasStarted = false;
   textSize(30);
-  text("FINI!!!! Alors ils ont trouvé ?", width/2, height - 40)
+  text("FINI! C'était " + motActuel, width/2, height - 40)
 
 }
 
@@ -202,16 +208,40 @@ function displayText(){
   textAlign(CENTER);
   text("Dessinez " + motActuel, width/2, height/4);
   textSize(40);
-  text("Cliquez pour commencer!", width/2, height/2); 
+  text("Cliquez lorsque vous avez retenu le mot", width/2, height/2); 
 
-  if(gameHasStarted == true){
+  if(knowsTheWord == true){
   stroke(255);
   fill(255)
   textSize(80)
   textAlign(CENTER);
   text("Dessinez " + motActuel, width/2, height/4);
   textSize(40);
-  text("Cliquez pour commencer!", width/2, height/2); 
+  text("Cliquez lorsque vous avez retenu le mot", width/2, height/2); 
+  }
+}
+
+function readyScreen(){
+  clear();
+   displayText();
+   textSize(40);
+   fill(0);
+   text("Cliquez pour commencer!", width/2, height/2);
+   
+   if(mouseIsPressed && knowsTheWord == true){
+    readyToDraw = true;
+    fill(0);
+    text("Cliquez pour commencer!", width/2, height/2);
+   }
+}
+
+function mousePressed(){
+  if(readyToDraw == true){
+    stroke(255);
+    readyToDraw = false;
+    fill(255);
+    text("Cliquez pour commencer!", width/2, height/2);
+    gameHasStarted = true;
   }
 }
 

@@ -1,7 +1,6 @@
 body {
   font-family: sans-serif;
-  
-  cursor: url("img/Crayon.png"), auto;
+  overflow: hidden; 
 }
 
 main {
@@ -29,6 +28,22 @@ main a {
   main p {
     max-width: 50vw;
   }
+}
+
+img{
+  display: inline;
+}
+
+p{
+  font-size: 20pt;
+}
+h1{
+  font-size: 60pt;
+  color:#fc7070;
+}
+
+main a{
+  background-color: #fc7070;
 }
 
 
